@@ -1,12 +1,12 @@
 import pygame
 
-BLUE = (0, 0, 255)
+RED = (255, 0, 0)
 
-class Player(pygame.sprite.Sprite):
+class Player2(pygame.sprite.Sprite):
     def __init__(self, x, y, controls):
         super().__init__()
         self.image = pygame.Surface((30, 30))
-        self.image.fill(BLUE)
+        self.image.fill(RED)
         self.rect = self.image.get_rect(center=(x, y))
         self.speed = 5
         self.controls = controls
