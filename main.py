@@ -68,11 +68,13 @@ while True:
     # Check collision with players and "kick" the ball
     if pygame.sprite.collide_rect(player1, ball):
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
-        ball.velocity += direction.normalize() * 5
+        if direction.length() != 0:
+            ball.velocity += direction.normalize() * 5
 
     if pygame.sprite.collide_rect(player2, ball):
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player2.rect.center)
-        ball.velocity += direction.normalize() * 5
+        if direction.length() != 0:
+            ball.velocity += direction.normalize() * 5
 
     # Each player now uses its own control set
     player1.update(keys)
