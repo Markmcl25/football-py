@@ -6,6 +6,8 @@ from ball import Ball
 
 # Initialize Pygame
 pygame.init()
+kick_direction_1 = pygame.math.Vector2(0, 0)
+kick_direction_2 = pygame.math.Vector2(0, 0)
 WIDTH, HEIGHT = 800, 500
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Top-Down 2D Football Game")
@@ -117,13 +119,11 @@ while True:
                         ball.velocity += direction.normalize() * kick_power_1
                 kick_power_1 = 0
 
-            if (event.key == pygame.K_RCTRL or event.key == pygame.K_KP_ENTER) and charging_2:
-                charging_2 = False
-                if pygame.sprite.collide_rect(player2, ball):
-                    direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player2.rect.center)
-                    if direction.length() != 0:
-                        ball.velocity += direction.normalize() * kick_power_2
-                kick_power_2 = 0
+            if event.key == pygame.K_SPACE and charging_1:
+                charging_1 = False
+                if pygame.math.Vector2(ball.rect.center).distance_to(player1.rect.center) < 60:
+                    ball.velocity += kick_direction_1 * (kick_power_1 * 2)
+                kick_power_1 = 0
 
     # Increase power while holding space
     keys = pygame.key.get_pressed()
@@ -132,10 +132,24 @@ while True:
         if kick_power_1 > max_power:
             kick_power_1 = max_power
 
+        # Track direction to ball (even if not touching)
+        player_pos = pygame.math.Vector2(player1.rect.center)
+        ball_pos = pygame.math.Vector2(ball.rect.center)
+        direction = ball_pos - player_pos
+        if direction.length() != 0:
+            kick_direction_1 = direction.normalize()
+
     if charging_2:
         kick_power_2 += 0.2
         if kick_power_2 > max_power:
             kick_power_2 = max_power
+
+        # Track direction to ball
+        player2_pos = pygame.math.Vector2(player2.rect.center)
+        ball_pos = pygame.math.Vector2(ball.rect.center)
+        direction = ball_pos - player2_pos
+        if direction.length() != 0:
+            kick_direction_2 = direction.normalize()
 
     # Update players and ball
     player1.update(keys)
