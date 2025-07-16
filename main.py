@@ -78,10 +78,17 @@ def draw_score():
 
 # Draw power bar for Player 1
 def draw_power_bar():
-    if charging:
-        bar_width = int((kick_power / max_power) * 100)
+    if charging_1:
+        bar_width = int((kick_power_1 / max_power) * 100)
         pygame.draw.rect(SCREEN, WHITE, (30, 450, 100, 10), 2)
         pygame.draw.rect(SCREEN, (0, 255, 0), (30, 450, bar_width, 10))
+
+# Draw power bar for player 2
+def draw_power_bar_p2():
+    if charging_2:
+        bar_width = int((kick_power_2 / max_power) * 100)
+        pygame.draw.rect(SCREEN, WHITE, (WIDTH - 130, 450, 100, 10), 2)
+        pygame.draw.rect(SCREEN, (255, 0, 0), (WIDTH - 130, 450, bar_width, 10))
 
 # Reset the ball to center
 def reset_ball():
