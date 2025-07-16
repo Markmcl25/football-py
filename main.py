@@ -108,6 +108,7 @@ while True:
     draw_field()
     players_group.draw(SCREEN)
     ball_group.draw(SCREEN)
-
+    ball.update()
+    draw_score()
     pygame.display.flip()
     clock.tick(60)
