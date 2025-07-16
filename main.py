@@ -57,7 +57,6 @@ charging_2 = False
 
 max_power = 10
 
-
 # Draw the field
 def draw_field():
     SCREEN.fill(GREEN)
@@ -121,10 +120,15 @@ while True:
 
     # Increase power while holding space
     keys = pygame.key.get_pressed()
-    if charging:
-        kick_power += 0.2
-        if kick_power > max_power:
-            kick_power = max_power
+    if charging_1:
+        kick_power_1 += 0.2
+        if kick_power_1 > max_power:
+            kick_power_1 = max_power
+
+    if charging_2:
+        kick_power_2 += 0.2
+        if kick_power_2 > max_power:
+            kick_power_2 = max_power
 
     # Update players and ball
     player1.update(keys)
