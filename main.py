@@ -162,5 +162,6 @@ while True:
     ball_group.draw(SCREEN)
     draw_score()
     draw_power_bar()
+    draw_power_bar_p2()
     pygame.display.flip()
     clock.tick(60)
