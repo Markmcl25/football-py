@@ -6,8 +6,6 @@ from ball import Ball
 
 # Initialize Pygame
 pygame.init()
-kick_direction_1 = pygame.math.Vector2(0, 0)
-kick_direction_2 = pygame.math.Vector2(0, 0)
 WIDTH, HEIGHT = 800, 500
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Top-Down 2D Football Game")
@@ -18,6 +16,10 @@ WHITE = (255, 255, 255)
 GRAY = (100, 100, 100)
 
 clock = pygame.time.Clock()
+
+# Kick directions (used to store direction during charging)
+kick_direction_1 = pygame.math.Vector2(0, 0)
+kick_direction_2 = pygame.math.Vector2(0, 0)
 
 # Control mappings
 controls_p1 = {
@@ -49,14 +51,11 @@ score_left = 0
 score_right = 0
 font = pygame.font.SysFont(None, 48)
 
-# Kick mechanic for Player 1
+# Kick mechanics
 kick_power_1 = 0
 charging_1 = False
-
-# Kick mechanic for Player 2
 kick_power_2 = 0
 charging_2 = False
-
 max_power = 10
 
 # Draw the field
@@ -78,14 +77,13 @@ def draw_score():
     score_text = font.render(f"{score_left}   :   {score_right}", True, WHITE)
     SCREEN.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, 10))
 
-# Draw power bar for Player 1
+# Draw power bars
 def draw_power_bar():
     if charging_1:
         bar_width = int((kick_power_1 / max_power) * 100)
         pygame.draw.rect(SCREEN, WHITE, (30, 450, 100, 10), 2)
         pygame.draw.rect(SCREEN, (0, 255, 0), (30, 450, bar_width, 10))
 
-# Draw power bar for player 2
 def draw_power_bar_p2():
     if charging_2:
         bar_width = int((kick_power_2 / max_power) * 100)
@@ -104,69 +102,67 @@ while True:
             pygame.quit()
             sys.exit()
 
+        # Start charging
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 charging_1 = True
             if event.key == pygame.K_RCTRL or event.key == pygame.K_KP_ENTER:
                 charging_2 = True
 
+        # Kick release
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE and charging_1:
-                charging_1 = False
-                if pygame.sprite.collide_rect(player1, ball):
-                    direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
-                    if direction.length() != 0:
-                        ball.velocity += direction.normalize() * kick_power_1
-                kick_power_1 = 0
-
             if event.key == pygame.K_SPACE and charging_1:
                 charging_1 = False
                 if pygame.math.Vector2(ball.rect.center).distance_to(player1.rect.center) < 60:
                     ball.velocity += kick_direction_1 * (kick_power_1 * 2)
                 kick_power_1 = 0
 
-    # Increase power while holding space
+            if (event.key == pygame.K_RCTRL or event.key == pygame.K_KP_ENTER) and charging_2:
+                charging_2 = False
+                if pygame.math.Vector2(ball.rect.center).distance_to(player2.rect.center) < 60:
+                    ball.velocity += kick_direction_2 * (kick_power_2 * 2)
+                kick_power_2 = 0
+
+    # Track held keys
     keys = pygame.key.get_pressed()
+
+    # Power buildup + direction tracking for Player 1
     if charging_1:
         kick_power_1 += 0.2
         if kick_power_1 > max_power:
             kick_power_1 = max_power
-
-        # Track direction to ball (even if not touching)
         player_pos = pygame.math.Vector2(player1.rect.center)
         ball_pos = pygame.math.Vector2(ball.rect.center)
         direction = ball_pos - player_pos
         if direction.length() != 0:
             kick_direction_1 = direction.normalize()
 
+    # Power buildup + direction tracking for Player 2
     if charging_2:
         kick_power_2 += 0.2
         if kick_power_2 > max_power:
             kick_power_2 = max_power
-
-        # Track direction to ball
         player2_pos = pygame.math.Vector2(player2.rect.center)
         ball_pos = pygame.math.Vector2(ball.rect.center)
         direction = ball_pos - player2_pos
         if direction.length() != 0:
             kick_direction_2 = direction.normalize()
 
-    # Update players and ball
+    # Update game objects
     player1.update(keys)
     player2.update(keys)
     ball.update()
 
-    # Player 2 auto-kick (bump)
+    # Gentle bump if not kicking
+    if pygame.sprite.collide_rect(player1, ball) and not charging_1:
+        direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
+        if direction.length() != 0:
+            ball.velocity += direction.normalize() * 2
+
     if pygame.sprite.collide_rect(player2, ball) and not charging_2:
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player2.rect.center)
         if direction.length() != 0:
             ball.velocity += direction.normalize() * 2
-
-    # Player 1 bump if not kicking
-    if pygame.sprite.collide_rect(player1, ball) and not charging_1:
-        direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
-        if direction.length() != 0:
-            ball.velocity += direction.normalize() * 2  # Smaller bump if not kicking
 
     # Goal detection
     if 40 <= ball.rect.left <= 50 and 225 <= ball.rect.centery <= 275:
@@ -177,7 +173,7 @@ while True:
         score_left += 1
         reset_ball()
 
-    # Draw everything
+    # Drawing
     draw_field()
     players_group.draw(SCREEN)
     ball_group.draw(SCREEN)
