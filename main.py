@@ -62,6 +62,11 @@ def draw_field():
     pygame.draw.rect(SCREEN, GRAY, (40, 225, 10, 50))
     pygame.draw.rect(SCREEN, GRAY, (WIDTH - 50, 225, 10, 50))
 
+# Draw field function
+def draw_score():
+    score_text = font.render(f"{score_left}   :   {score_right}", True, WHITE)
+    SCREEN.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, 10))
+
 # Main game loop
 while True:
     for event in pygame.event.get():
