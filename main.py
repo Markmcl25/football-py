@@ -149,7 +149,7 @@ while True:
             ball.velocity += direction.normalize() * 2
 
     # Player 1 bump if not kicking
-    if pygame.sprite.collide_rect(player1, ball) and not charging:
+    if pygame.sprite.collide_rect(player1, ball) and not charging_1:
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
         if direction.length() != 0:
             ball.velocity += direction.normalize() * 2  # Smaller bump if not kicking
