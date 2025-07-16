@@ -67,6 +67,10 @@ def draw_score():
     score_text = font.render(f"{score_left}   :   {score_right}", True, WHITE)
     SCREEN.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, 10))
 
+def reset_ball():
+    ball.rect.center = (WIDTH // 2, HEIGHT // 2)
+    ball.velocity = pygame.math.Vector2(0, 0)
+
 # Main game loop
 while True:
     for event in pygame.event.get():
