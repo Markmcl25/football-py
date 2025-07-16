@@ -96,6 +96,15 @@ while True:
     player2.update(keys)
     ball.update()
 
+    # Goal detection (left and right goals)
+    if 40 <= ball.rect.left <= 50 and 225 <= ball.rect.centery <= 275:
+        score_right += 1
+        reset_ball()
+
+    if WIDTH - 50 <= ball.rect.right <= WIDTH - 40 and 225 <= ball.rect.centery <= 275:
+        score_left += 1
+        reset_ball()
+
     draw_field()
     players_group.draw(SCREEN)
     ball_group.draw(SCREEN)
