@@ -42,6 +42,12 @@ ball = Ball(WIDTH // 2, HEIGHT // 2)
 
 ball_group = pygame.sprite.Group(ball)
 
+score_left = 0
+score_right = 0
+
+# Font for scoreboard
+font = pygame.font.SysFont(None, 48)
+
 # Draw field function
 def draw_field():
     SCREEN.fill(GREEN)
