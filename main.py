@@ -4,6 +4,11 @@ from player import Player
 from player2 import Player2
 from ball import Ball
 
+# Kick mechanic for Player 1
+kick_power = 0
+max_power = 10
+charging = False
+
 # Initialize Pygame
 pygame.init()
 WIDTH, HEIGHT = 800, 500
