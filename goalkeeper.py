@@ -18,3 +18,10 @@ class Goalkeeper(pygame.sprite.Sprite):
 
         # Stay within vertical bounds of goal
         self.rect.centery = max(175, min(self.rect.centery, 325))  # Goal height range
+
+    def deflect(self, ball):
+        # Push the ball away in a direction based on which goal
+        direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(self.rect.center)
+        if direction.length() != 0:
+            direction = direction.normalize()
+            ball.velocity = direction * ball.velocity.length() * 0.8  # reduce speed slightly
