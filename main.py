@@ -162,6 +162,11 @@ while True:
     goalkeeper_left.update(ball.rect.centery)
     goalkeeper_right.update(ball.rect.centery)
 
+    # Deflection logic
+    for keeper in [goalkeeper_left, goalkeeper_right]:
+        if pygame.sprite.collide_rect(keeper, ball):
+            keeper.deflect(ball)
+
     # Gentle bump if not kicking
     if pygame.sprite.collide_rect(player1, ball) and not charging_1:
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
