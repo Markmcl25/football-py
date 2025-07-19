@@ -3,6 +3,7 @@ import sys
 from player import Player
 from player2 import Player2
 from ball import Ball
+from goalkeeper import Goalkeeper
 
 # Initialize Pygame
 pygame.init()
@@ -45,6 +46,10 @@ players_group = pygame.sprite.Group(player1, player2)
 # Ball
 ball = Ball(WIDTH // 2, HEIGHT // 2)
 ball_group = pygame.sprite.Group(ball)
+
+# Goalkeeper (e.g. for left side)
+goalkeeper = Goalkeeper(80, HEIGHT // 2, is_left=True)
+goalkeeper_group = pygame.sprite.Group(goalkeeper)
 
 # Score
 score_left = 0
