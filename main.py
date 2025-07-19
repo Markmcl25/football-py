@@ -47,9 +47,10 @@ players_group = pygame.sprite.Group(player1, player2)
 ball = Ball(WIDTH // 2, HEIGHT // 2)
 ball_group = pygame.sprite.Group(ball)
 
-# Goalkeeper (e.g. for left side)
-goalkeeper = Goalkeeper(80, HEIGHT // 2, is_left=True)
-goalkeeper_group = pygame.sprite.Group(goalkeeper)
+# Goalkeepers
+goalkeeper_left = Goalkeeper(80, HEIGHT // 2, is_left=True)
+goalkeeper_right = Goalkeeper(WIDTH - 80, HEIGHT // 2, is_left=False)
+goalkeepers_group = pygame.sprite.Group(goalkeeper_left, goalkeeper_right)
 
 # Score
 score_left = 0
@@ -157,6 +158,9 @@ while True:
     player1.update(keys)
     player2.update(keys)
     ball.update()
+    ball.update()
+    goalkeeper_left.update(ball.rect.centery)
+    goalkeeper_right.update(ball.rect.centery)
 
     # Gentle bump if not kicking
     if pygame.sprite.collide_rect(player1, ball) and not charging_1:
@@ -182,6 +186,7 @@ while True:
     draw_field()
     players_group.draw(SCREEN)
     ball_group.draw(SCREEN)
+    goalkeepers_group.draw(SCREEN)
     draw_score()
     draw_power_bar()
     draw_power_bar_p2()
