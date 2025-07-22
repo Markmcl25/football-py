@@ -171,7 +171,7 @@ while True:
     if pygame.sprite.collide_rect(player1, ball) and not charging_1:
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player1.rect.center)
         if direction.length() != 0:
-            ball.velocity += direction.normalize() * 21
+            ball.velocity += direction.normalize() * 2
 
     if pygame.sprite.collide_rect(player2, ball) and not charging_2:
         direction = pygame.math.Vector2(ball.rect.center) - pygame.math.Vector2(player2.rect.center)
